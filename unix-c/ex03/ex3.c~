@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include <string.h>
+#include <limits.h>
+
+void print(unsigned int x);
+
+int main(int argc, char *argv[])
+{
+  
+}
+
+void print(unsigned int x)
+{
+  int nbits = sizeof(unsigned int)*8;
+  unsigned int msb = 1 << (nbits - 1);
+  for (int i = 1; i <= nbits; i++) {
+    /* ここに 何か書く */
+    
+    if (i % 8 == 0) putchar(' ');
+    x <<= 1; /* xを1ビット左シフト */
+  }
+}
