@@ -1,0 +1,735 @@
+@charset "utf-8";
+/*
+ * 初期化
+ *   http://meyerweb.com/eric/tools/css/reset/ 
+ *   v2.0 | 20110126
+ *   License: none (public domain)
+ */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* 
+ * 基本設定
+ */
+body {
+	min-width:660px;
+	font-family: Arial,Helvetica,'ヒラギノ角ゴ Pro W3','Hiragino Kaku Gothic Pro','メイリオ',Meiryo,'ＭＳ Ｐゴシック','IPA Pゴシック','さざなみゴシック','VL ゴシック',sans-serif;
+	background-color: white;
+	color: #333;
+	font-size: 14pt;
+}
+
+img {
+  border-style: none;
+  vertical-align: bottom;
+}
+
+.math {
+  font-family: 'Times New Roman','ＭＳ 明朝',serif !important;
+  font-style: italic !important;
+  font-weight: normal !important;
+}
+
+.multi-column {
+  -moz-column-width: 20em;
+  -moz-column-gap: 1em;
+  -webkit-column-width: 20em;
+  -webkit-column-gap: 1em;
+}
+
+/* use css hack : clearfix */
+.clearfix:after {
+  content: ".";
+  display: block;
+  visibility: hidden;
+  height: 0.1px;
+  font-size: 0.1em;
+  line-height: 0;
+  clear: both;
+}
+
+.clearfix {
+  zoom: 100%;
+}
+
+/* box-shadow : borderを設定したboxには使用しない方がいい */
+.shadow-box {
+  -moz-box-shadow: 3px 3px 5px #ddd;
+  -webkit-box-shadow: 3px 3px 5px #ddd;
+  box-shadow: 3px 3px 5px #ddd;
+}
+
+.padding-none {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+
+/*
+ * ヘッダー，メニュー，フッター
+ */
+#header {
+  min-height:110px;
+  position: relative;
+  background: #000 url(bgi_header.bmp) no-repeat bottom left;
+}
+
+#lab-name {
+  padding: 20px 0 0 40px;
+  font-size: 95%;
+  font-weight: bold;
+  color: white;
+}
+
+#link-eng {
+  position: absolute;
+  right: 10%;
+  bottom: 0;
+}
+
+#menu ul {
+  margin-top: 7px;
+  list-style-type: none;
+  text-align: center;
+  background: white url(bgi_menu.gif) repeat-x bottom left; /* ref-1:bgi */
+}
+
+#menu li {
+  display: -moz-inline-box; /* for Firefox 2 */
+  display: inline-block;
+  /display: inline;
+  /zoom: 1;
+  font-size: 125%;
+  width: 5em;
+  text-align: center;
+  border-bottom-style: solid;
+  border-bottom-width: 10px;  /* ref-1 */
+}
+
+.menu-red {
+  border-color: rgb(245,19,26);
+  background-color: rgb(245,19,26);
+}
+.menu-blue {
+  border-color: rgb(25,79,158);
+  background-color: rgb(25,79,158);
+}
+.menu-orange {
+  border-color: rgb(247,152,51);
+  background-color: rgb(247,152,51);
+}
+.menu-purple {
+  border-color: rgb(141,80,154);
+  background-color: rgb(141,80,154);
+}
+.menu-green {
+  border-color: rgb(128,182,47);
+  background-color: rgb(128,182,47);
+}
+.menu-pink {
+  border-color: rgb(243,101,153);
+  background-color: rgb(243,101,153);
+}
+.menu-yellow {
+  border-color: rgb(243,227,22);
+  background-color: rgb(243,227,22);
+}
+
+#menu a, #menu span {
+  display: block;
+  padding: 10px 0 3px;
+}
+
+#menu a {
+  background-color: white;
+  color: #333;
+  text-decoration: none;
+}
+
+#menu span {
+  background-color: #f6f6f6;
+  color: #888;
+}
+
+#menu a:hover {
+  background-color: transparent !important;
+  color: white !important;
+}
+
+#fotter {
+  border-top: 30px solid #000;
+  font-size: 80%;
+  padding: 0.5em 50px;
+  line-height: 2.5ex;
+}
+
+#fotter a {
+  text-decoration: none;
+  color: #222;
+}
+
+/* 
+ * コンテンツ設定（色以外）
+ */
+#contents {
+  margin: 5px 0 20px;
+  border-top-style: solid;
+  border-top-width: 10px; /* ref-1 */
+  padding-left: 2.5%;
+  padding-right: 2.5%;
+  color: #222;
+  line-height: 135%;
+}
+
+#contents h1, #contents h2, #contents h3 {
+  font-weight: bold;
+}
+
+#contents h1 {
+  margin: 1ex 0 0;
+  font-size: 350%;
+  line-height: 120%;
+  color: #ddd;
+}
+
+#contents h2 {
+  margin: 1.2ex 0 0.4ex;
+  padding-left: 30px;
+  font-size: 125%;
+  background-position: center left;
+  background-repeat: no-repeat;
+}
+
+#contents h3 {
+  margin: 0.5ex 0 0.5ex;
+  padding-left: 0.5em;
+  font-size: 110%;
+  border-left-style: solid;
+  border-left-width: 10px;
+}
+
+#contents a {
+  text-decoration: none;
+  border-bottom-width: 1px;
+  border-bottom-style: dotted;
+}
+
+#contents img {
+  border-style: none;
+  vertical-align: bottom;
+}
+
+#contents p {
+  text-indent: 1em;
+}
+
+/*
+ * コンテンツ設定（色）
+ */
+.theme-red { border-color: rgb(245,19,26); }
+.theme-blue { border-color: rgb(25,79,158); }
+.theme-orange { border-color: rgb(247,152,51); }
+.theme-purple { border-color: rgb(141,80,154); }
+.theme-green { border-color: rgb(128,182,47); }
+.theme-pink { border-color: rgb(243,101,153); }
+.theme-yellow { border-color: rgb(243,227,22); }
+
+.theme-red h2 { background-image: url(bgi_h2_red.gif); }
+.theme-blue h2 { background-image: url(bgi_h2_blue.gif); }
+.theme-orange h2 { background-image: url(bgi_h2_orange.gif); }
+.theme-purple h2 { background-image: url(bgi_h2_purple.gif); }
+.theme-green h2 { background-image: url(bgi_h2_green.gif); }
+.theme-pink h2 { background-image: url(bgi_h2_pink.gif); }
+.theme-yellow h2 { background-image: url(bgi_h2_yellow.gif); }
+
+.theme-red h3 { border-color: rgb(245,19,26); }
+.theme-blue h3 { border-color: rgb(25,79,158); }
+.theme-orange h3 { border-color: rgb(247,152,51); }
+.theme-purple h3 { border-color: rgb(141,80,154); }
+.theme-green h3 { border-color: rgb(128,182,47); }
+.theme-pink h3 { border-color: rgb(243,101,153); }
+.theme-yellow h3 { border-color: rgb(243,227,22); }
+
+.theme-red .theme-border { border-color: rgb(245,19,26); }
+.theme-blue .theme-border { border-color: rgb(25,79,158); }
+.theme-orange .theme-border { border-color: rgb(247,152,51); }
+.theme-purple .theme-border { border-color: rgb(141,80,154); }
+.theme-green .theme-border { border-color: rgb(128,182,47); }
+.theme-pink .theme-border { border-color: rgb(243,101,153); }
+.theme-yellow .theme-border { border-color: rgb(243,227,22); }
+
+.theme-red .theme-bg-color { background-color: rgb(245,19,26); }
+.theme-blue .theme-bg-color { background-color: rgb(25,79,158); }
+.theme-orange .theme-bg-color { background-color: rgb(247,152,51); }
+.theme-purple .theme-bg-color { background-color: rgb(141,80,154); }
+.theme-green .theme-bg-color { background-color: rgb(128,182,47); }
+.theme-pink .theme-bg-color { background-color: rgb(243,101,153); }
+.theme-yellow .theme-bg-color { background-color: rgb(243,227,22); }
+
+.theme-red .theme-color { color: rgb(245,19,26); }
+.theme-blue .theme-color { color: rgb(25,79,158); }
+.theme-orange .theme-color { color: rgb(247,152,51); }
+.theme-purple .theme-color { color: rgb(141,80,154); }
+.theme-green .theme-color { color: rgb(128,182,47); }
+.theme-pink .theme-color { color: rgb(243,101,153); }
+.theme-yellow .theme-color { color: rgb(243,227,22); }
+
+.theme-red .theme-color-darker { color: rgb(127,5,8); }
+.theme-red .theme-color-brighter { color: rgb(250,146,148); }
+.theme-blue .theme-color-darker { color: rgb(13,40,79); }
+.theme-blue .theme-color-brighter { color: rgb(53,122,223); }
+.theme-orange .theme-color-darker { color: rgb(147,78,6); }
+.theme-orange .theme-color-brighter { color: rgb(251,200,143); }
+.theme-purple .theme-color-darker { color: rgb(72,40,87); }
+.theme-purple .theme-color-brighter { color: rgb(192,150,200); }
+.theme-green .theme-color-darker { color: rgb(64,92,24); }
+.theme-green .theme-color-brighter { color: rgb(181,221,123); }
+.theme-pink .theme-color-darker { color: rgb(160,12,65); }
+.theme-pink .theme-color-brighter { color: rgb(249,185,208); }
+.theme-yellow .theme-color-darker { color: rgb(127,118,7); }
+.theme-yellow .theme-color-brighter { color: rgb(250,243,148); }
+
+/* リンク関連 */
+.theme-red a:link { color: rgb(127,5,8); }
+.theme-red a:visited { color: rgb(250,146,148); }
+.theme-blue a:link { color: rgb(0,0,139); }
+.theme-blue a:visited { color: rgb(53,122,223); }
+.theme-orange a:link { color: rgb(147,78,6); }
+.theme-orange a:visited { color: rgb(251,200,143); }
+.theme-purple a:link { color: rgb(72,40,87); }
+.theme-purple a:visited { color: rgb(192,150,200); }
+.theme-green a:link { color: rgb(64,92,24); }
+.theme-green a:visited { color: rgb(181,221,123); }
+.theme-pink a:link { color: rgb(160,12,65); }
+.theme-pink a:visited { color: rgb(249,185,208); }
+.theme-yellow a:link { color: rgb(127,118,7); }
+.theme-yellow a:visited { color: rgb(250,243,148); }
+
+a.red-anchor:link { color: rgb(127,5,8) !important; }
+a.red-anchor:visited { color: rgb(250,146,148) !important; }
+a.blue-anchor:link { color: rgb(13,40,79) !important; }
+a.blue-anchor:visited { color: rgb(53,122,223) !important; }
+a.orange-anchor:link { color: rgb(147,78,6) !important; }
+a.orange-anchor:visited { color: rgb(251,200,143) !important; }
+a.purple-anchor:link { color: rgb(72,40,87) !important; }
+a.purple-anchor:visited { color: rgb(192,150,200) !important; }
+a.green-anchor:link { color: rgb(64,92,24) !important; }
+a.green-anchor:visited { color: rgb(181,221,123) !important; }
+a.pink-anchor:link { color: rgb(160,12,65) !important; }
+a.pink-anchor:visited { color: rgb(249,185,208) !important; }
+a.yellow-anchor:link { color: rgb(127,118,7) !important; }
+a.yellow-anchor:visited { color: rgb(250,243,148) !important; }
+
+
+/*
+ * index.html 
+ */
+#index_intro {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+#index_lab-img-wrapper {
+  width: 100%;
+  height: 280px;
+  background: #f8f8f8 url(bgi_index_labimg_bottom.gif) repeat-x bottom left;
+}
+
+#index_lab-img {
+  position: relative;
+  width: 80%;
+  min-width: 660px;
+  height: 270px;
+  margin: 0 auto;
+  background: transparent url(bgi_labimg_daytime.png) no-repeat center center;
+}
+
+#index_lab-img-body {
+  background: transparent url(bgi_labimg.png) no-repeat center center;
+  text-align: center;
+}
+
+#index_lab-img-clock {
+  position: absolute;
+  left: 50%;
+  top: 85px;
+}
+
+#index_lab-img-room-light {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 270px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: transparent;
+}
+
+/* これは，JavaScriptがoffの時のスタイル */
+#index_news {
+  font-size: 80%;
+  color: #333;
+  border: 1px solid #888;
+  /* 以下，削除されるスタイル */
+  padding: 10px;
+  width: 70%;
+  margin: 0 auto 20px;
+}
+
+#index_news h2 {
+	margin: 0 0 3px;
+	padding: 0;
+	background-image: none;
+	font-weight: bold;
+	color: black;
+	border-bottom: #aaa 1px solid;
+}
+
+#index_news dl {
+	list-style: none;
+}
+
+#index_news dt {
+	font-weight: bold;
+}
+
+#index_news dd {
+	margin-left: 1em;
+}
+
+#index_intro-message {
+	width: 60%;
+	margin: 2ex auto 4ex;
+	padding: 1ex 0.5em;
+	border: 2px solid #888;
+	background: white;	/* IE8以下のfilterでbox-shadowをかけると文字にまで影がつくため */
+}
+
+#index_intro-message p:first-child {
+  text-indent: 0;
+}
+
+#index_main {
+  width: 100%;
+  min-width: 660px;
+  background: white url(bgi_index_main.gif) no-repeat top right;
+}
+
+#index_studies-wrapper {
+  width: 69%;
+  float: left;
+  margin-right: 3px; /* index_mainが665pxあるはずなのでピクセル指定でもOKのはず */
+  border-top-width: 10px;
+  border-top-style: solid;
+}
+
+#index_studies {
+  padding: 0 1% 0 10%;
+}
+
+.index_study {
+  margin: 2ex 0;
+}
+
+#index_studies h2 {
+  margin: 0.5ex 0.2em;
+  padding: 0.5ex 0.5em 0.4ex;
+  background: none;
+  font-size: 160%;
+  border-bottom: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  display: none;
+}
+
+#index_studies h3 {
+  margin: 0.5ex 1em;
+  padding: 0.5ex 0.5em 0.4ex;
+}
+
+#index_studies p {
+  margin: 0.5ex 1em 0.5ex 1.5em;
+}
+
+#index_contact-wrapper {
+  width: 30%;
+  float: left;
+  border-top-width: 10px;
+  border-top-style: solid;
+  font-size: 75%;
+  line-height: 145%;
+}
+
+#index_contact {
+  padding: 0 20% 0 1%;
+}
+
+#index_contact h2 {
+  margin: 0.5ex 0.2em 0.5ex;
+  padding: 0.5ex 0.5em 0.2ex 0.5em;
+  background: none;
+  font-size: 120%;
+  border-bottom: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+}
+
+#index_contact dl {
+  margin: 0 1em 0;
+}
+
+#index_contact dt {
+  margin-top: 0.5ex;
+  padding-left: 0.2em;
+  font-weight: bold;
+}
+
+#index_contact dd {
+  margin: 0 0.5em 0;
+}
+
+#index_contact .indent-plus {
+  margin-left: 1em;
+}
+
+#index_contact ul {
+  margin-left: 0.5em;
+}
+
+#index_contact li {
+  margin-left: 0.5em;
+}
+
+/* -------------------------------------------- */
+/* studies.html */
+/* -------------------------------------------- */
+.studies_group {
+	margin: 1em 0;
+	text-align: center;
+}
+
+.studies_abstract {
+	display: -moz-inline-box;	/* for Firefox 2 */
+	display: inline-block;
+	/display: inline;
+	/zoom: 1;
+	vertical-align: top;
+	width: 80%;
+	max-width: 30em;
+	margin: 0 0.5em 2ex;
+	padding: 0.5em 1em 1em;
+	text-align: left;
+	background-color: #eee; /* old color #f6f6f6; */
+}
+
+.studies_abstract p {
+	font-size: 90%;
+	line-height: 140%;
+	text-indent: 1em;
+}
+
+.studies_img {
+	width: 400px;	/* Mサイズの画像の幅に設定 */
+	margin: 0 auto;
+	position: relative;
+}
+
+.studies_img-upsize {
+	display: block;
+	position: absolute;
+	top: 22px;
+	right: 22px;
+	background: transparent;
+}
+
+.studies_detail {
+	display: block;
+	text-align: right;
+	margin-top: 0.3ex;
+	padding-right: 1em;
+	color: #888;
+	font-size: 80%;
+  border-bottom-style: none !important;
+}
+
+.studies_detail img {
+	vertical-align: top;
+	margin-left: 0.5em;
+}
+
+.studies_popup-comment {
+	display: none;
+}
+
+/* -------------------------------------------- */
+/* achievements.html */
+/* -------------------------------------------- */
+.ach_list {
+  list-style: decimal;
+}
+
+.ach_item {
+	margin: 0.5ex 2em 0.7ex 2.5em !important;
+}
+
+.ach_title, .ach_book {
+  font-weight: bold;
+}
+
+.ach_title:before {
+  content: '"';
+}
+
+.ach_title:after {
+  content: '"';
+}
+
+.ach_book:before {
+  content: open-quote;
+}
+
+.ach_book:after   {
+  content: close-quote;
+}
+
+.ach_journal {
+  font-style: italic;
+}
+
+.ach_volume {
+  font-weight: bold;
+}
+
+#ach_search {
+  width: 90%;
+  margin: 0 auto 3ex;
+  text-align: center;
+}
+
+#ach_search-form {
+  width: 100%;
+  margin: 1ex 0 0.5ex;
+}
+
+.ach_form-unit {
+  margin: 0 0.5em;
+}
+
+#ach_search-results {
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid red;
+}
+
+#ach_search-results th, #ach_search-results td {
+  padding: 0.5ex 0.5em 0.2ex;
+  border-style: solid;
+  border-width: 1px;
+}
+
+#ach_search-results th {
+  font-weight: bold;
+  color: white;
+}
+
+#ach_search-results th a {
+  color: white;
+  border-color: white;
+}
+
+#ach_search-results td {
+ color: #666;
+}
+
+/* -------------------------------------------- */
+/* staffs.html */
+/* -------------------------------------------- */
+.staffs_profile {
+  margin: 0.5ex 1em 1ex;
+}
+
+.staffs_profile th, .staffs_profile td {
+  padding: 0.5ex 0.5em 0.2ex;
+  border: 1px solid #ddd;
+}
+
+.staffs_profile th {
+  font-weight: bold;
+}
+
+.staffs_profile li {
+  margin-left: 0;
+  padding: 0.5ex 0.5em 0.2ex;
+  border-bottom: 1px dotted #ddd;
+}
+
+.staffs_profile li:last-child {
+  border-bottom: none;
+}
+
+/* -------------------------------------------- */
+/* members.html */
+/* -------------------------------------------- */
+#members_list {
+	margin: 2ex 1em;
+}
+
+#members_list dt {
+  margin: 1.2ex 0 0.4ex;
+  padding: 0 0.5em;
+  font-size: 125%;
+  font-weight: bold;
+  border-left-width: 10px;
+  border-left-style: solid;
+}
+
+#members_list dd {
+	margin-left: 1em;
+}

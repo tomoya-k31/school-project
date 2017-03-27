@@ -1,0 +1,247 @@
+* html,body {
+	margin:0;
+	padding:0
+}
+
+body {
+	background-color:#FFFFFF;
+	font-size: 80%;
+	font-family: sans-serif;
+	text-align: center
+}
+
+p {
+	margin:0 10px 10px
+}
+
+a {
+	display: block;
+	color: #6B0022;
+	padding: 10px
+}
+
+br {
+	clear: both
+}
+
+div#container {
+	background-color: #27394C;
+	text-align:left;
+	padding: 30px 60px;
+	width: 710px;
+	margin: 0 auto
+}
+
+div#header {
+	padding-bottom: 5px
+}
+
+div#header h1 {
+	height:80px;
+	line-height:80px;
+	margin:0;
+	padding-left:10px
+}
+
+div#wrapper {
+	background-color:#FFFFFF
+}
+
+div#decorate {
+	margin-bottom: 15px;
+	background-color:#cdc2ae
+}
+
+div#menu {
+	padding: 25px
+}
+
+div#menu ul {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	border: 0
+}
+
+div#menu li {
+	float: left;
+	list-style-type: none;
+	padding: 0px 5px;
+	border-left: 2px solid;
+	font-weight: bold;
+	font-size: 15px
+}
+
+div#menu li#right {
+	border: none;
+	padding-left:0px
+}
+
+div#menu li a {
+	text-decoration: none;
+	padding: 0px 5px
+}
+
+div#title {
+	padding: 5px 15px;
+}
+
+div#title h2 {
+	margin: 0px
+}
+
+div#img {
+	padding: 7px 25px 15px 25px
+}
+
+div#content {
+	padding: 0px 0px 0px 25px;
+	float: left;
+	width: 450px
+}
+
+div#content p {
+	margin-top: 5px;
+	margin-bottom: 20px;
+	padding: 0px;
+	line-height: 1.4
+}
+
+div#content h2 {
+	margin: 0px;
+	font-size: 18px
+}
+
+div#content h3 {
+	margin: 0px;
+	font-size: 15px
+}
+
+div#content ol {
+	padding: 0px 10px 0px 25px;
+	padding-bottom: 10px;
+	margin: 0px
+}
+
+div#content li {
+	padding: 5px 5px 5px 0px;
+	margin: 0px
+}
+
+div#content dl {
+	padding: 0px 0px 10px 0px;
+	margin: 0px
+}
+
+div#content dt {
+	font-weight: bold;
+	font-size: 15px
+}
+
+div#content dd {
+	padding: 0px 0px 5px 15px;
+	margin: 0px
+}
+
+div#content dd a {
+	padding: 5px;
+	text-decoration: none;
+	font-size: 18px
+}
+
+div#navigation {
+	border-left: 3px solid;
+	border-color: #a9a9a9;
+	float: right;
+	width: 230px;
+	padding-bottom: 50px
+}
+
+div#navigation ul {
+	font-size: 16px;
+	margin: 0px;
+	padding: 0px 15px 20px 15px;
+	list-style-type: none;
+	border: none
+}
+
+div#navigation li a {
+	text-decoration: none;
+	padding: 0px;
+	font-weight: bold
+}
+
+div#navigation dl {
+	padding-bottom: 15px;
+	margin: 0px
+}
+
+div#navigation dt {
+	margin: 0px;
+	padding: 0px 15px
+}
+
+div#navigation dd{
+	margin: 0px;
+	padding: 0px 15px
+}
+
+div#navigation dd a{
+	text-decoration: none;
+	margin: 0px;
+	padding: 0px
+}
+
+div#footer {
+	text-align: center;
+	color: #FFFFFF;
+	clear:both;
+	width:100%
+}
+
+div#footer p {
+	font-size: 15px;
+	margin: 0;
+	padding-top: 20px
+}
+
+div.left-top {
+	background:url(../image/left-top-corners.png) no-repeat left top;
+}
+
+div.right-top {
+	background:url(../image/right-top-corners.png) no-repeat right top;
+}
+
+div.left-bottom {
+	background:url(../image/left-bottom-corners.png) no-repeat left bottom;
+}
+
+div.right-bottom {
+	background:url(../image/right-bottom-corners.png) no-repeat right bottom;
+}
+
+div.in-left-top {
+	background:url(../image/in-left-corners.png) no-repeat left top;
+}
+
+div.in-right-top {
+	background:url(../image/in-right-corners.png) no-repeat right top;
+}
+
+div#content  h3{
+	font-size: 20px;
+	margin-bottom: 10px;
+}
+
+div#content table{
+	padding: 0px;
+	margin: 0px;
+}
+
+div#content td {
+	padding: 0px;
+	margin: 0px;
+	padding-bottom: 10px;
+	vertical-align: top;
+}
