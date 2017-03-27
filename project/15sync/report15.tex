@@ -1,0 +1,126 @@
+\documentclass[a4j]{jarticle}
+\usepackage[dvipdfmx]{graphicx,color}
+\usepackage{verbatim}
+\usepackage{ascmac}
+\usepackage{url}
+\usepackage{listings,jlistings}
+\usepackage{color}
+%\setlength{\marginparwidth}{20mm}%% 傍注欄の横幅の設定
+
+\input{/home/ryousuke/listings_temp.tex}
+
+\title{情報科学プロジェクト実験レポート課題}
+\author{S142063 佐藤涼亮}
+
+\begin{document}
+\maketitle
+\centerline{\LARGE \underline{スレッドの同期}}
+\section{課題の内容}
+{\large \underline{スレッドの同期による素数のカウント}}
+\subsection{要点}
+\begin{enumerate}
+\item マルチスレッドプログラミングによる並列処理を行う
+\item スレッド数はCPU数に応じて設定する
+\item 複数のスレッドがメモリ等の計算資源を操作しているときに競合が発生しないようにする
+\end{enumerate}
+\section{プログラムの説明}
+逐次処理で計算していたプログラムを、
+マルチスレッドプログラムに変更し並列処理を行い、
+実行時間の短縮を図る。
+今回、変更するプログラムは指定した数以下の自然数にいくつ素数があるかを数えるプログラム。
+
+並列処理には、std::threadを使い、
+自然数を分割し素数判定を行う。
+スレッドの数はCPUの数に合わせる。
+
+\subsection{目的}
+マルチスレッドプログラムのスレッドの同期による、プログラムの整合性を保つ
+
+\subsection{方法}
+シングルスレッドプログラムをマルチスレッドプログラムに変更し、
+スレッドの同期を用いた素数のカウント
+
+\subsection{結果}
+\begin{screen}
+\begin{verbatim}
+ryousuke@HP-Spectre:~/project/15sync$ time ./prime 3333333
+# of prime (<=3333333) is 239119
+
+real  0m0.531s
+user  0m0.528s
+sys 0m0.000s
+ryousuke@HP-Spectre:~/project/15sync$ time ./prime_thread 3333333
+# of prime (<=3333333) is 239119
+It took 0.289744 seconds
+
+real  0m0.293s
+user  0m1.132s
+sys 0m0.000s
+ryousuke@HP-Spectre:~/project/15sync$ time ./prime 33333333
+# of prime (<=33333333) is 2050943
+
+real  0m13.164s
+user  0m13.164s
+sys 0m0.000s
+ryousuke@HP-Spectre:~/project/15sync$ time ./prime_thread 33333333
+# of prime (<=33333333) is 2050943
+It took 7.28054 seconds
+
+real  0m7.284s
+user  0m28.984s
+sys 0m0.000s
+ryousuke@HP-Spectre:~/project/15sync$ time ./prime 333333333
+# of prime (<=333333333) is 17955279
+
+real  5m48.356s
+user  5m48.368s
+sys 0m0.008s
+ryousuke@HP-Spectre:~/project/15sync$ time ./prime_thread 333333333
+# of prime (<=333333333) is 17955279
+It took 198.546 seconds
+
+real  3m18.550s
+user  13m13.264s
+sys 0m0.000s
+ryousuke@HP-Spectre:~/project/15sync$ 
+\end{verbatim}
+\end{screen}
+
+\begin{table}[htb]
+\begin{center}
+\begin{tabular}{|r|r|r|r|} \hline
+指定した数 & 逐次処理 & 並列処理 & 結果 \\ \hline
+3333333 & 0m0.531s & 0m0.293s & 239119 \\
+33333333 & 0m13.164s & 0m7.284s & 2050943 \\
+333333333 & 5m48.356s & 3m18.550s & 17955279 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+CPUコア4個の環境で実行し、時間測定にはtimeコマンドを用いた。
+
+\subsection{考察}
+結果を見ると、シングルスレッドのプログラムに対して、
+std::threadの場合は約1.8倍、処理効率が向上したと言える。
+また、結果も一致していることからプログラムの整合性も保たれたと言える。
+
+\section{感想}
+今回の実験においても、マルチスレッド化することで
+プログラムの整合性を保ちつつ効率は上げることができた。
+今回もreal時間とuser時間を見比べてみると、
+CPUの数だけしっかり活用できている。
+プログラムを並列化するとき、どの部分をどのように並列化するかが難しいと感じた。
+今回の課題の場合、100を1~25,26~50...,76~100のように単純に分けてしまうと、
+数が大きくなるに連れて調べる回数が増えるため、
+最初に割り当てられたスレッドは短く、最後に割り当てられたスレッドは長くなってしまう。
+指定された数が大きいほどその差は大きくなってしまう。
+差が大きくなると、早く終わってしまったスレッドはその分無駄になってしまうので、
+平均的に割り当てられるようにしたい。
+そこで今回は、\verb|[1,9,...],[3,11,...],[5,13,...],[7,15,...]|のように、
+判定を奇数のみに絞り、数値の大小が偏らないように割り当てることで対応した。
+このような対応力を経験を積むことで鍛えていきたいと思う。
+
+\section{プログラム}
+\lstinputlisting[caption=prime\_number.cpp]{prime\string_number.cpp}
+\lstinputlisting[caption=prime\_number\_thread.cpp]{prime\string_number\string_thread.cpp}
+
+\end{document}

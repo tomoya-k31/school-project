@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head><meta charset="UTF-8"><title>AJax sample</title>
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+        $(function() {
+            $('#input1').keyup(function(){
+                if ($(this).val().length == 3) {
+                   var formData = $('#form01').serialize();
+                   alert(formData);
+                   $.post("/~okam/cgi-bin/abc3.cgi", formData, function(result){
+                      $('#info').val(result);
+                   });
+                }
+            });
+        });
+</script>
+</head>
+<body>
+<h1>Ajax post sample</h1>
+input text into the upper box
+<form id='form01'>
+<input id='input1' name='upper' type='text'/><br>
+<input id='info'   name='lower' type='text'/>
+</form>
+</body>
+</html>

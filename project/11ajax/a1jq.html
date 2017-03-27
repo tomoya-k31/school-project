@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head><meta charset="UTF-8"><title>AJax sample</title>
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+        $(function() {
+            $.get("/~okam/cgi-bin/abc.cgi","",function(result){
+                $('#info').val(result);
+            });
+        });
+</script>
+</head>
+<body>
+<h1>Ajax sample</h1>
+<form id='form01'>
+<input id='info' type='text'/>
+</form>
+</body>
+</html>
+

@@ -1,0 +1,139 @@
+\documentclass[a4j]{jarticle}
+\usepackage[dvipdfmx]{graphicx,color}
+\usepackage{verbatim}
+\usepackage{ascmac}
+\usepackage{url}
+\usepackage{listings,jlistings}
+\usepackage{color}
+%\setlength{\marginparwidth}{20mm}%% 傍注欄の横幅の設定
+
+\input{/home/ryousuke/listings_temp.tex}
+
+\title{情報科学プロジェクト実験レポート課題}
+\author{S142063 佐藤涼亮}
+
+\begin{document}
+\maketitle
+\centerline{\LARGE \underline{スレッドプログラミング}}
+\section{課題の内容}
+{\large \underline{C++のスレッドプログラミングを用いた円周率の計算}}
+\subsection{要点}
+\begin{enumerate}
+\item マルチスレッドプログラミングによる並列処理を行う
+\item スレッド数はCPU数に応じて設定する
+\end{enumerate}
+\section{プログラムの説明}
+逐次処理で計算していたプログラムを、
+マルチスレッドプログラムに変更し並列処理を行い、
+実行時間の短縮を図る。
+円周率の近似計算には、xを[0,1]の範囲で
+曲線4/(1+x*x)の下側の面積を数値積分することで求める。
+
+並列処理には、
+std::threadを使う場合と
+std::async()を使う場合を作成し、
+積分を分割し計算を行う。
+また、積分範囲を分割するintervals変数の値を
+40000000とINT\_MAXの2種類それぞれプログラムを作成した。
+スレッドの数はCPUの数に合わせる。
+
+\subsection{目的}
+マルチスレッドプログラムのプログラム実行の性能を調査する
+
+\subsection{方法}
+シングルスレッドプログラムをマルチスレッドプログラムに変更し、
+実行時間を比較する
+
+\subsection{結果}
+piはシングルスレッド、
+threadはstd::threadを用いた、
+futureはstd::async()を用いたプログラムになっている。
+\begin{screen}
+\begin{verbatim}
+ryousuke@HP-Spectre:~/project/14thread$ time ./pi
+Estimation of pi is 3.1415926536
+
+real  0m0.710s
+user  0m0.708s
+sys 0m0.000s
+ryousuke@HP-Spectre:~/project/14thread$ time ./thread
+Estimation of pi is 3.1415926536
+
+real  0m0.335s
+user  0m1.216s
+sys 0m0.000s
+ryousuke@HP-Spectre:~/project/14thread$ time ./future
+Estimation of pi is 3.1415926536
+
+real  0m0.232s
+user  0m0.812s
+sys 0m0.000s
+ryousuke@HP-Spectre:~/project/14thread$ time ./piIntMax
+Estimation of pi is 3.1415926536
+
+real  0m35.986s
+user  0m35.984s
+sys 0m0.000s
+ryousuke@HP-Spectre:~/project/14thread$ time ./threadIntMax
+Estimation of pi is 3.1415926536
+
+real  0m15.653s
+user  1m0.936s
+sys 0m0.008s
+ryousuke@HP-Spectre:~/project/14thread$ time ./futureIntMax
+Estimation of pi is 3.1415926536
+
+real  0m10.845s
+user  0m41.828s
+sys 0m0.008s
+ryousuke@HP-Spectre:~/project/14thread$ 
+\end{verbatim}
+\end{screen}
+
+\begin{table}[htb]
+\begin{center}
+\begin{tabular}{|l|c|r|r|} \hline
+プログラム & 結果 & 経過時間 & CPU時間 \\ \hline
+pi & 3.1415926536 & 0m0.710s & 0m0.708s \\
+thread & 3.1415926536 & 0m0.335s & 0m1.216s \\
+future & 3.1415926536 & 0m0.232s & 0m0.812s \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[htb]
+\begin{center}
+\begin{tabular}{|l|c|r|r|} \hline
+プログラム & 結果 & 経過時間 & CPU時間 \\ \hline
+piIntMax & 3.1415926536 & 0m35.986s & 0m35.984s \\
+threadIntMax & 3.1415926536 & 0m15.653s & 1m0.936s \\
+futureIntMax & 3.1415926536 & 0m10,845s & 0m41.828s \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+CPUコア4個の環境で実行し、時間測定にはtimeコマンドを用いた。
+
+\subsection{考察}
+結果を見ると、シングルスレッドのプログラムに対して、
+std::threadの場合は約2.2倍、
+std::async()の場合は約3.2倍、処理効率が向上したと言える。
+
+\section{感想}
+今回の実験において、マルチスレッド化することで効率は上がった。
+結果のuser時間をCPUの数で割るとreal時間に近似していることから、
+しっかりCPUの個数分スレッドが生成され、並列処理していることがわかる。
+今まで作成していたプログラムも並列化できるのではないかと、
+少し楽しくなってきた。
+もっと、計算に時間を要するプログラムをより多くのCPUを持ったコンピューターや
+サーバー、他にもMPIの並列処理においてPCクラスタを構築し、
+短い時間で実行できるようにしてみたいと思った。
+
+\section{プログラム}
+\lstinputlisting[caption=pi.cpp]{pi.cpp}
+\lstinputlisting[caption=piIntMax.cpp]{piIntMax.cpp}
+\lstinputlisting[caption=thread.cpp]{thread.cpp}
+\lstinputlisting[caption=threadIntMax.cpp]{threadIntMax.cpp}
+\lstinputlisting[caption=future.cpp]{future.cpp}
+\lstinputlisting[caption=futureIntMax.cpp]{futureIntMax.cpp}
+
+\end{document}

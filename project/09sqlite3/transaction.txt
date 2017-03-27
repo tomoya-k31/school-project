@@ -1,0 +1,10 @@
+create table A (id text, a integer);
+create table B (id text, a integer);
+insert into A values('abc', 100);
+insert into A values('xyz', 200);
+insert into B values('abc', 300);
+insert into B values('xyz', 400);
+
+
+select A.a+B.a from A,B where A.id=B.id and A.id='abc';
+

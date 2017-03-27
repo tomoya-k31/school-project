@@ -1,0 +1,154 @@
+\documentclass[a4j]{jarticle}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{ascmac}
+\usepackage{url}
+\usepackage{listings,jlistings}
+\usepackage{color}
+%\setlength{\marginparwidth}{20mm}%% 傍注欄の横幅の設定
+
+\input{/home/ryousuke/listings_temp.tex}
+
+\title{情報科学プロジェクト実験レポート課題}
+\author{S142063 佐藤涼亮}
+
+\begin{document}
+\maketitle
+\centerline{\LARGE \underline{SQL(Structured Query Language)}}
+\section{課題の内容}
+{\large \underline{C++プログラムによるデータベース操作}}
+\subsection{要点}
+\begin{itemize}
+\item 住所から郵便番号を検索するプログラムを作成
+\item 郵便番号データ用dbを作成し、ファイル13tokyo.csvの内容をinsertするプログラムを作成
+\item 郵便番号から住所を検索するプログラムの作成
+\item 住所から郵便番号を検索するプログラムの作成
+\item dbのエントリを更新したり削除したりするプログラムの作成
+\end{itemize}
+\section{プログラムの説明}
+\subsection{課題1}
+郵便番号データ用dbを作成し、ファイル13tokyo.csvの内容をinsertするプログラムの作成。
+テーブル名やスキーマは、事前に作成しておき、以下の形式を用いる。
+\begin{screen}
+\begin{verbatim}
+create table post (
+    code integer,num5 char(5), num char(7), 
+    kana1  text, kana2  text, kana3  text,
+    kanji1 text, kanji2 text, kanji3 text,
+    d1 integer, d2 integer, d3 integer,
+    d4 integer, d5 integer, d6 integer
+);
+\end{verbatim}
+\end{screen}
+\\
+sqlite3のライブラリ関数を用い、テーブルにデータの挿入(INSERT)を行う。
+また、多量のデータを挿入するため、トランザクションを用い一つのSQL文として扱い、
+一度のデータベースへの書き込みとして実行することで、研究室でのネットワーク間の実行も
+スムーズに行うことができる。
+
+\subsection{課題2}
+・郵便番号から住所を検索するプログラム
+
+・住所から郵便番号を検索するプログラム
+
+・dbのエントリを更新したり削除したりするプログラム
+
+以上の3つのプログラムを実装した。\\
+実装方法は課題1と大差ないが、
+すべて、インジェクションを回避するためにバインドメカニズムを用いて実装した。
+sql文にプレースホルダを置きバインド変数として扱うことで、
+入力された文字列を数値定数や文字列定数として組み込まれる。
+よって、変数に;や'などの特殊文字が含まれていたとしても、ただの文字として扱われる。
+更新、削除のプログラムでは、条件を設定する関数を作成し、ANDとORにも対応させた。
+また、更新や削除で指定できる要素は団体コードと郵便番号、住所の３つに絞った。
+
+\subsection{目的}
+プログラムにおけるデータベースの操作。
+
+\subsection{方法}
+C++プログラムによるデータベースを操作するプログラムの実装。
+
+\subsection{結果}
+最小限の実行結果を記述する。
+\begin{itembox}{一連の実行結果}
+\begin{verbatim}
+$ ./addrSearch 1002211
+郵便番号:1002211の住所は 東京都小笠原村母島 です。
+$ ./postalSearch 東京都小笠原村母島
+住所:東京都小笠原村母島 の郵便番号は 1002211 です。
+$ ./addrSearch 1000001
+郵便番号:1000001の住所は 東京都千代田区千代田 です。
+$ ./postalSearch 東京都千代田区千代田
+住所:東京都千代田区千代田 の郵便番号は 1000001 です。
+$ ./dlud 
+1 : Update
+2 : Delete
+3 : Quit
+操作命令を番号で選択してください：1
+\end{verbatim}
+\end{itembox}
+\begin{screen}
+\begin{verbatim}
+更新する要素の選択と入力
+1 : 全国地方公共団体コード
+2 : 郵便番号
+3 : 住所
+番号を入力してください：2
+郵便番号の入力 -> 1234567
+条件の入力
+1 : 全国地方公共団体コード
+2 : 郵便番号
+3 : 住所
+番号を入力してください：3
+住所の入力 -> 東京都小笠原村母島
+1 : AND
+2 : OR
+3 : Quit
+番号を入力してください：3
+Quit
+$ ./addrSearch 1002211  <---郵便番号が更新されたため表示されない
+$ ./addrSearch 1234567  <---郵便番号が更新され見つかったので表示される
+郵便番号:1234567の住所は 東京都小笠原村母島 です。
+$ ./dlud 
+1 : Update
+2 : Delete
+3 : Quit
+操作命令を番号で選択してください：2
+条件の入力
+1 : 全国地方公共団体コード
+2 : 郵便番号
+3 : 住所
+番号を入力してください：2
+郵便番号の入力 -> 1000001
+1 : AND
+2 : OR
+3 : Quit
+番号を入力してください：3
+Quit
+$ ./addrSearch 1000001                 <---エントリが削除されたため表示されない
+$ ./postalSearch 東京都千代田区千代田  <---エントリが削除されたため表示されない
+\end{verbatim}
+\end{screen}
+
+\subsection{考察}
+郵便番号や住所の検索、データの更新や削除を行うことができ、期待通りの結果が得られた。
+
+\section{感想}
+データベースの操作は以前に行ったことがあったが、sql文を入力するだけであった。
+今回は、C++のプログラムを用いてデータベースの操作を学んだ。
+プログラムを用いてデータベースの操作をする上で、
+SQLインジェクションの脅威があり、セキュリティ上簡単に実装できない。
+これらを踏まえてプログラムを実装するのは、少し骨が折れた。
+今後、必ず今回のようにデータベースを扱うことがあると思うので、
+インジェクションの脅威をしっかり対策をすることで、
+セキュリティの高いプログラムを作成し、
+他者の信頼を得られるような人物になれるように精進したい。
+
+
+\section{プログラム}
+\lstinputlisting[caption=report1.cpp,label=report1.cpp]{report1.cpp}
+\lstinputlisting[caption=report2-1.cpp,label=report2-1.cpp]{report2-1.cpp}
+\lstinputlisting[caption=report2-2.cpp,label=report2-2.cpp]{report2-2.cpp}
+\lstinputlisting[caption=report2-3.cpp,label=report2-3.cpp]{report2-3.cpp}
+
+\end{document}

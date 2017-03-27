@@ -1,0 +1,16 @@
+ryousuke@HP-Spectre:~/project/15sync$ time ./ex 10000000000
+# of prime (<=1410065408) is 70462980
+It took 1622.02 seconds
+
+real  27m2.028s
+user  107m8.764s
+sys 0m0.500s
+ryousuke@HP-Spectre:~/project/15sync$ time ./ex2 10000000000
+# of prime (<=1410065408) is 70462980
+It took 1704.81 seconds
+
+real  28m24.816s
+user  95m23.936s
+sys 0m0.276s
+ryousuke@HP-Spectre:~/project/15sync$ 
+

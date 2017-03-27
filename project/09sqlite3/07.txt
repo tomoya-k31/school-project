@@ -1,0 +1,249 @@
+// 文字列と数値の相互変換(C++11)
+#include <iostream>
+#include <string>
+
+int main()
+{
+   // 文字列から整数へ変換
+   std::string s = "123";
+   int x = std::stoi(s);   // string to integer
+   std::cout << s <<": "<< x <<"\n";
+
+   // 文字列から実数へ変換
+   s = "123.45";
+   double y = std::stod(s); // string to double
+   std::cout << s <<": "<< y <<"\n";
+
+   // 任意の数値から文字列への変換
+   std::string n = std::to_string(x) + " ***";
+   std::cout << x <<": "<< n <<"\n";
+}
+
+SQLインジェクションの脅威
+
+// 秘密を保存している表
+	create table secret (
+	   userid text not null,
+	   passwd text,
+	   secret integer,        -- この部分が秘密の内容
+	   primary key(userid)
+	);
+
+// プログラムが作成するSQL文
+// 単に文字列の連結をしている（idとpsがユーザ入力）
+	string sql = "select userid,secret from secret where userid = \'"
+		       + id +"\' and passwd = \'" + ps + "\'";
+// 想定される使用方法
+	ユーザの入力:
+		userid:foo
+		password:abacab
+	結果のSQL文：
+		select userid,secret from secret
+		where userid = 'foo' and passwd = 'abacab'
+	結果：
+		foo, 10
+// 秘密がすべて漏洩するパターン
+// 条件にORが挿入される
+	ユーザの入力:
+		userid:xxx
+		password:' OR 'a' = 'a
+	結果のSQL文：
+		select userid,secret from secret
+		where userid = 'xxx' and passwd = '' OR 'a' = 'a'
+
+	結果：
+		foo, 10
+		bar, 15
+		baz, 25
+		qux, 17
+// データをすべて消されてしまうパターン
+// セミコロン(;)の挿入で任意のSQLが実行される
+	ユーザの入力:
+		userid:
+		password:';delete from secret where 'a'='a
+	結果のSQL文：
+		select userid,secret from secret
+		where userid = '' and passwd = '';delete from secret
+                                                  where 'a'='a'
+
+// データをすべて消されてしまうパターン２
+// コメント開始記号(--)の挿入で後半部分が無効化される
+	ユーザの入力:
+		userid:';delete from secret --        
+		password:
+	結果のSQL文：
+		select userid,secret from secret
+		where userid = '';delete from secret --' and passwd = ''
+----------------------
+対処するには
+1.入力文字列中の特殊文字をエスケープ（サニタイジング）
+	' 　　：'' に変換する
+	; 　　：受け付けない
+	その他：エスケープ文字(\)を付加する
+2.整数などの値の入力は文字列から値に必ず変換して内容を確認
+3.ストアードプロシージャを利用する
+	プログラム中でSQLを作成しない
+	DBMSにSQL文を登録しておき、引数だけをシステムに渡す
+4.そもそも文字列をそのまま登録しない
+	例：文字をASCIIコードの16進数表記で表し、
+	その数値を文字として登録する（数字だけが登録される）
+	abc -> 616263
+
+// SQL インジェクションによる脆弱性を持ったプログラム
+//
+// g++ -I/usr/local/include thisfile.cpp -lsqlite3
+// として、sqlite3のライブラリ関数をリンクする
+#include <iostream>
+#include <MyDBS3.hpp>
+using namespace std;
+
+int main()
+{
+   MyDBS d("passwd.db");
+   if (!d) {
+      cout << "error\n";
+      return 0;
+   }
+
+   // userid, passwordにはスペース文字も使える
+   string id, ps;
+   cout << "userid:";
+   getline(cin, id);
+   cout << "password:";
+   getline(cin, ps);
+
+   string sql = "select userid,secret from secret where userid = \'"
+               + id +"\' and passwd = \'" + ps + "\'";
+   cout << sql << "\n";
+
+   if (d.prepare(sql) != SQLITE_OK)
+      cout << d.error() << "\n";
+
+   cout << d.sql() << "\n";
+
+   string userid;
+   int secret;
+   while (d.step(&userid, &secret) == SQLITE_ROW)
+      cout << userid << " " << secret << "\n";
+
+   return 0;
+}
+
+// CSVファイルからのDB作成
+
+CSVファイルとは
+	CSV: Comma Separated Values
+	カンマ（,）で区切った行ごとのデータ（改行には\r\nを使うこともある）
+	古くからデータベースソフトや表計算ソフトで使用される
+	ファイルの拡張子は.csv
+	「カンマ区切り」とも呼ばれる
+	値と文字列を区別するために、文字列を二重引用符(")で括ることがある
+	データの例：
+		"abc",3,"xyz"
+		"akb",48,"zzz"
+
+単純にデータ挿入を行うには以下のコードでも良い
+	（ファイルの内容が壊れていないことが前提）
+	// read csv-file and insert it into db
+	string line;
+	while (getline(fin, line)) {
+	   string sql = "insert into post values (" + line + ")";
+	   if (db.exec(sql) != SQLITE_OK) {
+	      cout << db.error();
+	      return 1;
+	   }
+	}
+
+トランザクション
+	複数のSQL文を一つにまとめたもの
+	例えば、テーブルAからBへデータを移動する場合
+		UPDATE A SET a = a - 10 WHERE id='abc';
+		UPDATE B SET a = a + 10 WHERE id='abc';
+	が必要。しかし、どちらか一つが失敗すると、合計金額がおかしくなる。
+	両方成功または両方失敗ならばデータベースの一貫性は保たれる。
+	また、スレッドのクリティカルセクションと同じで、複数のプログラムが
+	同時にデータベースにアクセスした際に順序づけをしないとまずい場合もある。
+	例えば、
+	プログラムA
+		UPDATE A SET a = a - 10 WHERE id='abc';
+		UPDATE B SET a = a + 10 WHERE id='abc';
+	プログラムB
+		select A.a+B.a FROM A,B WHERE A.id=B.id AND A.id='abc';
+	というような場合、プログラムBがプログラムAの途中で実行されるとまずい。
+	そこで、この二つのSQL文をまとめる。
+		BEGIN TRANSACTION;
+		UPDATE A SET a = a - 10 WHERE id='abc';
+		UPDATE B SET a = a + 10 WHERE id='abc';
+		COMMIT TRANSACTION;
+	COMMITが実行されるまで、BEGIN時点の状態が残される。
+	途中で失敗したことが分かった場合、
+		ROLLBACK TRANSACTION;
+	により、BEGINの状態に戻すことができる。
+
+sqlite3とトランザクション
+	sqlite3におけるデータベースの実態はファイルである。
+	複数のプログラムがデータベースに同時にアクセスできてしまう。
+	そのため、一つのSQL文ごとにファイルへの書き込みを行う。
+	トランザクションを行った場合には途中の状態をメモリや一時ファイルに
+	保持しておき、COMMITの時点でデータベースファイルを書き換える。
+
+目的：
+郵便番号から住所を検索したり、その逆に
+住所から郵便番号を検索するプログラムを作成したい。
+そこで、
+
+課題１
+郵便番号データ用dbを作成し、ファイル13tokyo.csvの内容をinsertするプログラム
+を作成せよ。スキーマは以下を形式として、事前に手動で作成しておいてよい。
+	 create table post (
+           code integer,num5 char(5), num char(7), 
+           kana1  text, kana2  text, kana3  text,
+           kanji1 text, kanji2 text, kanji3 text,
+           d1 integer, d2 integer, d3 integer,
+           d4 integer, d5 integer, d6 integer
+        )
+
+    $ ./a.out 13tokyo.csv        <<------ コマンド引数としてファイルを指定する
+    $ sqlite3
+    sqlite> select count(*) from post;  <<------ 入力件数を確認
+    3538
+
+	------ a.outの実行時間が異様に長いならば改善すること。
+
+課題２
+次の３つのプログラムを作成せよ（インタフェースは自由)
+・郵便番号から住所を検索するプログラム
+・住所から郵便番号を検索するプログラム
+・dbのエントリを更新したり削除したりするプログラム
+
+-------------
+以下のファイルのオリジナルの漢字コードはSJISでかつ半角カタカナ文字が含まれているが、
+これらはすべて UTF-8でかつ全角のカタカナ文字に変換してある。半角数字はそのまま。
+/home/okam/project2013/13tokyo.csvを適宜コピーして用いること。
+
+-------------------------------------
+13tokyo.csv(http://www.post.japanpost.jp/zipcode/download.html)
+郵便番号データファイルの形式等
+
+    * 全角となっている町域部分の文字数が38文字を越える場合、
+      また半角となっているフリガナ部分の文字数が76文字を越える場合は、
+      複数レコードに分割しています。
+    * この郵便番号データファイルでは、以下の順に配列しています。
+
+   1. 全国地方公共団体コード(JIS X0401、X0402)………　半角数字
+   2. (旧)郵便番号(5桁)………………………………………　半角数字
+   3. 郵便番号(7桁)………………………………………　半角数字
+   4. 都道府県名　…………　半角カタカナ(コード順に掲載)　(注1)
+   5. 市区町村名　…………　半角カタカナ(コード順に掲載)　(注1)
+   6. 町域名　………………　半角カタカナ(五十音順に掲載)　(注1)
+   7. 都道府県名　…………　漢字(コード順に掲載)　(注1,2)
+   8. 市区町村名　…………　漢字(コード順に掲載)　(注1,2)
+   9. 町域名　………………　漢字(五十音順に掲載)　(注1,2)
+  10. 一町域が二以上の郵便番号で表される場合の表示　(注3)　(「1」は該当、「0」は該当せず)
+  11. 小字毎に番地が起番されている町域の表示　(注4)　(「1」は該当、「0」は該当せず)
+  12. 丁目を有する町域の場合の表示　(「1」は該当、「0」は該当せず)
+  13. 一つの郵便番号で二以上の町域を表す場合の表示　(注5)　(「1」は該当、「0」は該当せず)
+  14. 更新の表示（注6）（「0」は変更なし、「1」は変更あり、「2」廃止（廃止データのみ使用））
+  15. 変更理由　(「0」は変更なし、「1」市政・区政・町政・分区・政令指定都市施行、「2」住居表示の実施、
+      「3」区画整理、「4」郵便区調整等、「5」訂正、「6」廃止(廃止データのみ使用))
+
